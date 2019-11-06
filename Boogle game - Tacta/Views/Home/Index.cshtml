@@ -1,0 +1,105 @@
+﻿@using Boogle_game___Tacta.Models;
+@model BoogleModel
+
+
+<br />
+<br />
+<h2> Boogle game</h2>
+<div class=" container">
+    <div class="row">
+        <div class="col-8">
+            @for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    <button class="btn" id="@i.ToString()@j.ToString()" onclick="provjera(@i,@j);" style="width:150px;height:50px; margin:30px">    @Model.Letters[i, j]</button>
+                }
+                <br />
+            }
+            <div class="form-inline">
+                <form action="~/home/addword">
+                    <label>Word:</label>
+                    <input type="text" readonly id="rijec" class="form-control" style="width:100%" name="word" />
+                    <button type="submit" class="btn btn-success">Save word</button>
+                    <button onclick="Ponisti()" class="btn bnt-danger">Restart word</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-4">
+            <h4>List of added words</h4>
+            @foreach (string word in Model.Words)
+            {
+                <label>@word</label><br />
+            }
+        </div>
+    </div>
+</div>
+
+      
+<form action="~/home/checkWords" method="post">
+ <input type="submit"  value="End game" class="btn btn-lg"/>
+   
+</form>
+
+
+
+
+
+<script>
+    var prethodni = new Array();
+    function provjera(red, kolona) {
+        var trenutni = red + '' + kolona;
+        var odobreni = new Array();
+        for (var i = 0; i < 4; i++) {
+            for (var j = 0; j < 4; j++) {
+                if ((Math.abs(red - i) == 0 || Math.abs(red - i) == 1) && (Math.abs(kolona - j) == 0 || Math.abs(kolona - j) == 1)) {
+                    odobreni.push(i + '' + j);
+                }
+
+            }
+        }
+        prethodni.push(trenutni);
+        for (var i = 0; i < 4; i++) {
+            for (var j = 0; j < 4; j++) {
+                if (odobreni.indexOf(i + '' + j) == -1) {
+                    document.getElementById(i + '' + j).classList.add("btn-danger");
+                    document.getElementById(i + '' + j).disabled = true;
+                }
+            }
+        }
+
+        odobreni.forEach(function (element) {
+            document.getElementById(element).classList.remove("btn-danger");
+            document.getElementById(element).classList.add("btn-info");
+            document.getElementById(element).disabled = false;
+        });
+        prethodni.forEach(function (element) {
+            if (element != trenutni) {
+                document.getElementById(element).disabled = true;
+            }
+        });
+
+        var rijec = document.getElementById("rijec").value;
+        var trenutnoSlovo = document.getElementById(trenutni).innerHTML;
+        document.getElementById("rijec").value = rijec + trenutnoSlovo;
+
+        document.getElementById(trenutni).classList.remove("btn-info");
+
+        document.getElementById(trenutni).classList.add("btn-success");
+        document.getElementById(trenutni).disabled = true;
+
+    }
+
+    function Ponisti() {
+        document.getElementById("rijec").value = "";
+        prethodni = new Array();
+        for (var i = 0; i < 4; i++) {
+            for (var j = 0; j < 4; j++) {
+                document.getElementById(i + '' + j).disabled = false;
+                document.getElementById(i + '' + j).className = "btn";
+            }
+        }
+    }
+
+     
+</script>

@@ -1,0 +1,38 @@
+﻿@using Boogle_game___Tacta.Models
+@model List<WordResults>
+
+
+<h2>Result of game</h2>
+
+@foreach (WordResults player in Model)
+{
+<table class="table table-bordered">
+    <tr>
+        <th colspan="3" style="text-align:center">@player.Player</th>
+    </tr>
+    <tr>
+        <td>Word</td>
+        <td>Points</td>
+        <td>Descriptions</td>
+    </tr>
+    @foreach (WordResults.Result WR in player.Results)
+    {
+        <tr>
+            <td>@WR.Word</td>
+            <td>@WR.Points</td>
+            <td>@WR.Description</td>
+        </tr>
+    }
+    <tfoot>
+        <tr>
+            <td >Total points</td>
+            <td colspan="2">@player.TotalPoints</td>
+        </tr>
+    </tfoot>
+</table>
+<br />
+<hr />
+}
+
+
+
